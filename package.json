@@ -1,0 +1,33 @@
+{
+  "name": "node_blog",
+  "version": "1.0.0",
+  "description": "simple blog with user authentication",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoerGitKat/node-blog-app.git"
+  },
+  "keywords": [
+    "node",
+    "blog",
+    "routes",
+    "login",
+    "authentication"
+  ],
+  "author": "NoerGitKat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NoerGitKat/node-blog-app/issues"
+  },
+  "homepage": "https://github.com/NoerGitKat/node-blog-app#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "pg": "^6.2.3",
+    "pug": "^2.0.0-rc.1",
+    "sequelize": "^3.30.4"
+  }
+}
