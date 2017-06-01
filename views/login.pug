@@ -5,3 +5,5 @@ html
 		h1 Welcome to the login area! Very security.
 		p Fill in your username and password here:
 		form#loginForm(method="POST" action="/viewposts")
+			input.userName(type="text" placeholder="Your Username" required)
+			input.userPassword(type="text" placeholder="Your Password" hidden required)

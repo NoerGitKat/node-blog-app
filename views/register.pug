@@ -5,4 +5,8 @@ html
 		h1 Welcome to the register area! Much excited.
 		p Fill in the following textareas to register:
 		form#registerForm(method="POST" action="/viewposts")
-		
+			input.userName(type="text" placeholder="Your Username" required)
+			input.firstName(type="text" placeholder="Your First Name" required)
+			input.lastnameName(type="text" placeholder="Your Last Name" required)
+			input.userEmail(type="text" placeholder="Your Email Address" required)
+			input.userPassword(type="text" placeholder="Your Password" hidden required)

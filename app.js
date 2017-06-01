@@ -4,6 +4,7 @@ const app = express();
 const Sequelize = require('sequelize');
 const db = new Sequelize('postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@localhost/nodeblog');
 const bodyParser = require('body-parser')();
+const session = require('express-sessions');
 
 app.use('/', bodyParser);
 app.use(express.static('public'));
@@ -36,10 +37,12 @@ app.get('/', (req, res) => {
 
 app.get('/register', (req, res) => {
 	//register account route
+	res.render('register');
 });
 
 app.post('/register', (req, res) => {
 	//register account route
+
 });
 
 app.get('/login', (req, res) => {
