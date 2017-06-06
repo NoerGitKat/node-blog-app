@@ -3,10 +3,19 @@ html
 		title Register
 	body
 		h1 Welcome to the register area! Much excited.
-		p Fill in the following textareas to register:
+		p Fill in the following form to register:
 		form#registerForm(method="POST" action="/viewposts")
-			input.userName(type="text" placeholder="Your Username" required)
-			input.firstName(type="text" placeholder="Your First Name" required)
-			input.lastnameName(type="text" placeholder="Your Last Name" required)
-			input.userEmail(type="text" placeholder="Your Email Address" required)
-			input.userPassword(type="text" placeholder="Your Password" hidden required)
+			p
+				input.userName(type="text" name="username" placeholder="Your Username" required)
+			p
+				input.firstName(type="text" name="firstname" placeholder="Your First Name" required)
+			p
+				input.lastnameName(type="text" name="lastname" placeholder="Your Last Name" required)
+			p
+				input.userEmail(type="text" name="email" placeholder="Your Email Address" required)
+			p
+				input.password(type="text" name="password" placeholder="Your Password" hidden required)
+			p
+				input.confirmPassword(type="text" name="password2" placeholder="Confirm Password" hidden required)
+			p
+				input.submit(type="submit" name="submit" value="Register!")
