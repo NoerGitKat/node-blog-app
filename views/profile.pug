@@ -1,13 +1,13 @@
-extends layout
-
-block content
-	h1 Your amazing profile
-	a(href="/") Home
-	br
-	a(href="/posts") View my own cool posts
-	br
-	a(href="/viewall") View everyone's posts, wow!
-	br
-	a(href="/newpost") Create a new post
-	h3 My latest groovy post...
-	//-  put in variable for latest post
+html
+	head
+		title Such profile!
+		link(rel="stylesheet", href="../css/style.css")
+	body
+		div.container
+			h1 My amazing profile
+			a(href="/") Home
+			a(href="/posts") View my own cool posts
+			a(href="/viewall") View everyone's posts, wow!
+			a(href="/newpost") Create a new post
+			h3 My latest groovy post...
+			//-  put in variable for latest post

@@ -1,13 +1,13 @@
-extends layout
-
-block content
-	a(href="/") Home
-	h1 Welcome to the login area! Very security.
-	p Fill in your username and password here:
-	form#loginForm(method="POST" action="/profile")
-		p
-			input.userName(type="text" placeholder="Your Username" required)
-		p
-			input.userPassword(type="password" placeholder="Your Password" required)
-		p
-			input.loginButton(type="submit" value="Login!")
+html
+	head
+		title Log in here!
+		link(rel="stylesheet", href="../css/style.css")
+	body
+		a(href="/") Home
+		div.container
+			h1 Welcome to the login area! Very security.
+			p Fill in your username and password here:
+			form#loginForm(method="POST" action="/profile")
+					input.userName(type="text" placeholder="Your Username" required)
+					input.userPassword(type="password" placeholder="Your Password" required)
+					input.loginButton(type="submit" value="Login!")

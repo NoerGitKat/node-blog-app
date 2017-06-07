@@ -1,20 +1,18 @@
-extends layout
-
-block content
-	h1 Welcome to the register area! Much excited.
-	p Fill in the following form to register:
-	form#registerForm(method="POST" action="/profile")
-		p
-			input.userName(type="text" name="username" placeholder="Your Username" required)
-		p
-			input.firstName(type="text" name="firstname" placeholder="Your First Name" required)
-		p
-			input.lastnameName(type="text" name="lastname" placeholder="Your Last Name" required)
-		p
-			input.userEmail(type="text" name="email" placeholder="Your Email Address" required)
-		p
-			input.password(type="password" name="password" placeholder="Your Password" required)
-		p
-			input.confirmPassword(type="password" name="password2" placeholder="Confirm Password" required)
-		p
-			input.submit(type="submit" name="submit" value="Register!")
+html
+	head
+		title Register
+		link(rel="stylesheet", href="../css/style.css")
+	body
+		a(href="/") Home
+		div.container
+			h1 Welcome to the register area! Much excited.
+			p Fill in the following form to register:
+			div.form
+				form#registerForm(method="POST" action="/profile")
+					input.userName(type="text" name="username" placeholder="Your Username" minlength="3" required)
+					input.firstName(type="text" name="firstname" placeholder="Your First Name" minlength="3" required)
+					input.lastnameName(type="text" name="lastname" placeholder="Your Last Name" minlength="3" required)
+					input.userEmail(type="text" name="email" placeholder="Your Email Address" required)
+					input.password(type="password" name="password" placeholder="Your Password" required)
+					input.confirmPassword(type="password" name="password2" placeholder="Confirm Password" required)
+					input.submit(type="submit" name="submit" value="Register!")

@@ -1,0 +1,40 @@
+body {
+	background: #f9f9f9;
+	color: #1d605b;
+}
+
+h1 {
+	margin: 5px 10px 5px;
+}
+
+p {
+	margin: 10px;
+} 
+
+
+li {
+	list-style-type: none;
+	display: inline-block;
+	margin: 100px;
+}
+
+a {
+	text-decoration: none;
+	border: 1px solid grey;
+	border-radius: 5px;
+	padding: 10px;
+	color: #1d605b;
+}
+
+a:hover {
+	color: darkgrey;
+}
+
+.container {
+	display: block;
+	border: 1px solid grey;
+	text-align: center;
+	padding: 10px 20px 20px;
+	width: 50%;
+	margin: 0 auto;
+}

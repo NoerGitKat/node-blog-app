@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const session = require('express-session');
 const Sequelize = require('sequelize');
 const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	host: 'localhost',
@@ -8,9 +10,6 @@ const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POST
 		timestampts: false
 	}
 });
-
-const bodyParser = require('body-parser');
-const session = require('express-session');
 
 app.use('/', bodyParser());
 app.use(express.static('public'));
@@ -25,7 +24,7 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-//Creating models necessary for login + posts + comments
+//Creating models for user + posts + comments
 const User = db.define('user', {
 	username: {
 		type: Sequelize.STRING,
@@ -82,7 +81,15 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-	
+	db.sync()						//sync to database for input new row
+	.then(() => User.create({
+		username: req.body.username,
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
+		email: req.body.email,
+		password: req.body.password
+	}))
+	.catch(error => console.log('Oh noes! An error has occurred! Destroy it with fire!', error));
 	//connect to database through sequelize w/ promise
 	//insert new data in db
 	//redirect to members area w/ posts
@@ -94,8 +101,19 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+	//check for valid form input 
 	//connect to database
 	//find match data
+	if(req.body.username.length < 3) {
+		res.redirect('/', () => { alert('Fill in username!')})
+	} else if (req.body.password == undefined) {
+		res.redirect('/', () => { alert('Fill in your password!')})
+	}
+
+	db.sync()
+	.then(() => {
+		
+	})
 
 });
 
@@ -109,6 +127,7 @@ app.get('/posts', (req, res) => {
 	//connect to database
 	//show all posts
 	//create option to post new post in posts pug file
+	res.render('posts');
 });
 
 
