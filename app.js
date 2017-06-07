@@ -29,27 +29,22 @@ app.use(session({
 const User = db.define('user', {
 	username: {
 		type: Sequelize.STRING,
-		allowNull: false,
     	unique: true
 	},
 	firstname: {
 		type: Sequelize.STRING,
-		allowNull: false,
     	unique: true
 	},
 	lastname: {
 		type: Sequelize.STRING,
-		allowNull: false,
     	unique: true
 	},
 	email: {
 		type: Sequelize.STRING,
-		allowNull: false,
     	unique: true
 	}, 
 	password: {
 		type: Sequelize.STRING
-		allowNull: false
 	}
 });
 
