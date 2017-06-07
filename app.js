@@ -1,36 +1,83 @@
-//require express, pg, sequelize, bodyparser
 const express = require('express');
 const app = express();
 const Sequelize = require('sequelize');
-const db = new Sequelize('postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@localhost/nodeblog');
-const bodyParser = require('body-parser')();
-const session = require('express-sessions');
+const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+	host: 'localhost',
+	dialect: 'postgres',
+	define: {
+		timestampts: false
+	}
+});
 
-app.use('/', bodyParser);
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+app.use('/', bodyParser());
 app.use(express.static('public'));
 
 app.set('views', 'views');
 app.set('view engine', 'pug');
 
-//Creating tables necessary for login + posts/comments
+//Create a session
+app.use(session({
+	secret: 'omg this is too secret to talk about',
+	resave: false,
+	saveUninitialized: true
+}));
+
+//Creating models necessary for login + posts + comments
 const User = db.define('user', {
-	username: Sequelize.STRING,
-	firstname: Sequelize.STRING,
-	lastname: Sequelize.STRING,
-	email: Sequelize.STRING,
-	password: Sequelize.STRING
+	username: {
+		type: Sequelize.STRING,
+		allowNull: false,
+    	unique: true
+	},
+	firstname: {
+		type: Sequelize.STRING,
+		allowNull: false,
+    	unique: true
+	},
+	lastname: {
+		type: Sequelize.STRING,
+		allowNull: false,
+    	unique: true
+	},
+	email: {
+		type: Sequelize.STRING,
+		allowNull: false,
+    	unique: true
+	}, 
+	password: {
+		type: Sequelize.STRING
+		allowNull: false
+	}
 });
 
 const Post = db.define('post', {
-	title: Sequelize.STRING,
-	body: Sequelize.STRING
-})
+	title: {
+		type: Sequelize.STRING,
+	},
+	body: {
+		type: Sequelize.TEXT,
+		unique: true
+	}
+});
 
 const Comment = db.define('comment', {
-	body: Sequelize.STRING
-})
+	body: {
+		type: Sequelize.STRING
+	}
+});
 
-//Creating all routes first
+//Establishing relationships between models
+User.hasMany(Post);
+User.hasMany(Comment);
+Post.belongsTo(User);
+Post.hasMany(Comment);
+Comment.belongsTo(User);
+Comment.belongsTo(Post);
+
+//Routes
 app.get('/', (req, res) => {
 	res.render('index');			//homepage
 });
@@ -40,20 +87,26 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-	//connect to database
+	
+	//connect to database through sequelize w/ promise
 	//insert new data in db
 	//redirect to members area w/ posts
 
 });
 
 app.get('/login', (req, res) => {
-	//render login file
+	res.render('login');		//login page
 });
 
 app.post('/login', (req, res) => {
 	//connect to database
 	//find match data
 
+});
+
+app.get('/profile', (req, res) => {
+	//render profile
+	res.render('profile');
 });
 
 app.get('/posts', (req, res) => {
