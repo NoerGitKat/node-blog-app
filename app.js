@@ -7,7 +7,7 @@ const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POST
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
-		timestampts: false
+		timestamps: false
 	}
 });
 
@@ -93,6 +93,7 @@ app.post('/register', (req, res) => {
 	//connect to database through sequelize w/ promise
 	//insert new data in db
 	//redirect to members area w/ posts
+	res.redirect('/profile')
 
 });
 
@@ -104,30 +105,66 @@ app.post('/login', (req, res) => {
 	//check for valid form input 
 	//connect to database
 	//find match data
-	if(req.body.username.length < 3) {
+	if (req.body.username.length < 3) {
 		res.redirect('/', () => { alert('Fill in username!')})
-	} else if (req.body.password == undefined) {
+	} if (req.body.password == undefined) {
 		res.redirect('/', () => { alert('Fill in your password!')})
 	}
 
-	db.sync()
-	.then(() => {
-		
+	//find matching data between input and users in db
+	User.findOne({
+		where: {
+			username: user.username
+		}
 	})
-
+	.then((user) => {
+		if (user !== null && req.body.password === user.password) {
+			req.session.user = user;
+			res.redirect('/profile');
+		} else {
+			res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+		}
+	})
+	.catch(error) => {
+		res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+	});
 });
 
 app.get('/profile', (req, res) => {
-	//render profile
-	res.render('profile');
+	var user = req.session.user;
+    if (user === undefined) {				//only if user is logged in will profile be displayed, else alert message
+        res.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+    } else {
+        res.render('profile', {
+            user: user
+        });
+    }
 });
 
-app.get('/posts', (req, res) => {
+app.get('/myposts', (req, res) => {
 	//render posts file with variable
 	//connect to database
 	//show all posts
 	//create option to post new post in posts pug file
-	res.render('posts');
+	res.render('myposts');
+});
+
+app.post('/myposts', (req, res) => {
+	//connect to db
+	//insert new post
+	//render view w/ form for new post
+	Post.sync()
+	.then
+	res.render()
+});
+
+app.get('/logout', (req, res) => {
+	req.session.destroy(function(error) {
+		if(error) {
+			throw error;
+		}
+		res.redirect('/?message=' + encodeURIComponent("Successfully logged out."));
+	});
 });
 
 

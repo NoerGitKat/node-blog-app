@@ -2,17 +2,25 @@ html
 	head
 		title Register
 		link(rel="stylesheet", href="../css/style.css")
+		link(rel="stylesheet", href="../css/form.css")
+
 	body
-		a(href="/") Home
 		div.container
+			a(href="/") Home
 			h1 Welcome to the register area! Much excited.
 			p Fill in the following form to register:
-			div.form
-				form#registerForm(method="POST" action="/profile")
-					input.userName(type="text" name="username" placeholder="Your Username" minlength="3" required)
-					input.firstName(type="text" name="firstname" placeholder="Your First Name" minlength="3" required)
-					input.lastnameName(type="text" name="lastname" placeholder="Your Last Name" minlength="3" required)
-					input.userEmail(type="text" name="email" placeholder="Your Email Address" required)
-					input.password(type="password" name="password" placeholder="Your Password" required)
-					input.confirmPassword(type="password" name="password2" placeholder="Confirm Password" required)
-					input.submit(type="submit" name="submit" value="Register!")
+			form#registerForm(method="POST" action="/profile")
+				p Username:
+					input(type="text" name="username" placeholder="Your Username" minlength="3" required)
+				p First name:
+					input(type="text" name="firstname" placeholder="Your First Name" minlength="3" required)
+				p Last name:
+					input(type="text" name="lastname" placeholder="Your Last Name" minlength="3" required)
+				p Email:
+					input(type="email" name="email" placeholder="Your Email Address" required)
+				p Password:
+					input(type="password" name="password" placeholder="Your Password" required)
+				p Confirm Password:
+					input(type="password" name="password2" placeholder="Confirm Password" required)
+				p
+					input(type="submit" name="submit" value="Register!")
