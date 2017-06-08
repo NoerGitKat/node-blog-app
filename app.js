@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+const db = new Sequelize('nodeblog', 'postgres', 'Blabla_55', {
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
@@ -25,7 +25,7 @@ app.use(session({
 }));
 
 //Creating models for user + posts + comments
-const User = db.define('user', {
+var User = db.define('user', {
 	username: {
 		type: Sequelize.STRING,
     	unique: true
@@ -47,7 +47,7 @@ const User = db.define('user', {
 	}
 });
 
-const Post = db.define('post', {
+var Post = db.define('post', {
 	title: {
 		type: Sequelize.STRING,
 	},
@@ -57,7 +57,7 @@ const Post = db.define('post', {
 	}
 });
 
-const Comment = db.define('comment', {
+var Comment = db.define('comment', {
 	body: {
 		type: Sequelize.STRING
 	}
@@ -81,7 +81,8 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-	db.sync()						//sync to database for input new row
+	console.log(req.body.username)
+	db.sync({force: true})						//sync to database for input new row
 	.then(() => User.create({
 		username: req.body.username,
 		firstname: req.body.firstname,
@@ -105,30 +106,31 @@ app.post('/login', (req, res) => {
 	//check for valid form input 
 	//connect to database
 	//find match data
-	if (req.body.username.length < 3) {
-		res.redirect('/', () => { alert('Fill in username!')})
+	if (req.body.username == undefined) {
+		res.redirect('login')
 	} if (req.body.password == undefined) {
-		res.redirect('/', () => { alert('Fill in your password!')})
+		res.redirect('login')
 	}
 
 	//find matching data between input and users in db
-	User.findOne({
-		where: {
-			username: user.username
-		}
-	})
-	.then((user) => {
-		if (user !== null && req.body.password === user.password) {
-			req.session.user = user;
-			res.redirect('/profile');
-		} else {
-			res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-		}
-	})
-	.catch(error) => {
-		res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-	});
+	// User.findOne({
+	// 	where: {
+	// 		username: user.username
+	// 	}
+	// })
+	// .then((user) => {
+	// 	if (user !== null && req.body.password === user.password) {
+	// 		req.session.user = user;				//where the session starts
+	// 		res.redirect('/profile');
+	// 	} else {
+	// 		res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+	// 	}
+	// })
+	// .catch(error) => {
+	// 	res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+	// };
 });
+	
 
 app.get('/profile', (req, res) => {
 	var user = req.session.user;
@@ -153,13 +155,19 @@ app.post('/myposts', (req, res) => {
 	//connect to db
 	//insert new post
 	//render view w/ form for new post
-	Post.sync()
-	.then
-	res.render()
+	db.sync()
+	.then(() => {
+		Post.findAll({
+			where: {
+				user: user.username
+			}
+		})
+	})
+	res.render('myposts');
 });
 
 app.get('/logout', (req, res) => {
-	req.session.destroy(function(error) {
+	req.session.destroy(function(error) {			//destroy session after logout
 		if(error) {
 			throw error;
 		}
