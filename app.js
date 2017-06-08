@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const db = new Sequelize('nodeblog', 'postgres', 'Blabla_55', {
+const db = new Sequelize('nodeblog', 'postgres' /*process.env.POSTGRES_USER*/, 'Blabla_55' /*process.env.POSTGRES_PASSWORD*/, {
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
@@ -19,10 +19,12 @@ app.set('view engine', 'pug');
 
 //Create a session
 app.use(session({
-	secret: 'omg this is too secret to talk about',
+	secret: 'omg this is too secret to talk about' /*process.env.SECRET_SESSION*/,
 	resave: false,
 	saveUninitialized: true
 }));
+
+/* --------------------------------------------------------------------------------------------- */
 
 //Creating models for user + posts + comments
 var User = db.define('user', {
@@ -63,6 +65,8 @@ var Comment = db.define('comment', {
 	}
 });
 
+/* --------------------------------------------------------------------------------------------- */
+
 //Establishing relationships between models
 User.hasMany(Post);
 User.hasMany(Comment);
@@ -70,6 +74,8 @@ Post.belongsTo(User);
 Post.hasMany(Comment);
 Comment.belongsTo(User);
 Comment.belongsTo(Post);
+
+/* --------------------------------------------------------------------------------------------- */
 
 //Routes
 app.get('/', (req, res) => {
@@ -80,19 +86,17 @@ app.get('/register', (req, res) => {
 	res.render('register');			//register page
 });
 
-app.post('/register', (req, res) => {
-	db.sync({force: true})						//sync to database for input new row
-	.then(() => User.create({
+app.post('/register', (req, res) => {						//sync to database for input new row
+	User.create({
 		username: req.body.username,
 		firstname: req.body.firstname,
 		lastname: req.body.lastname,
 		email: req.body.email,
 		password: req.body.password
-	}))
+	})
 	.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 
-	res.redirect('/login')
-
+	res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
@@ -102,17 +106,16 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
 	if (req.body.username == undefined) {
 		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
-	} if (req.body.password == undefined) {
+	} 
+	if (req.body.password == undefined) {
 		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
-	} /*else {
+	} 
+	else {
 	// find matching data between input and users in db
-		db.sync()
-		.then(() => {
-			User.findOne({
-				where: {
-					username: user.username
-				}
-			})
+		User.findOne({
+			where: {
+				username: user.username
+			}
 		})
 		.then((user) => {
 			if (user !== null && req.body.password === user.password) {
@@ -122,10 +125,10 @@ app.post('/login', (req, res) => {
 				res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
 			}
 		})
-		.catch(error) => {
+		.catch( (error) => {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
-		};
-	}*/
+		});
+	}
 });
 	
 
@@ -142,40 +145,37 @@ app.get('/profile', (req, res) => {
 
 app.get('/myposts', (req, res) => {
 	var user = req.session.user;
-    /*if (user === undefined) {				//only accessible for logged in users
+    if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
-    } else {*/
-    db.sync()
-	.then(() => {
-		Post.findAll(/*{
+    } else {
+		Post.findAll({
 			where: {
 				user: user.username
 			}
-		}*/)
+		})
 		.then((posts) => {
 			res.render('myposts', { 
 				posts: posts
-				});
-			})
+			});
 		})
-	// }
-	});
+	}
+});
 
 app.get('/newpost', (req,res) => {
 	var user = req.session.user;
-    // if (user === undefined) {				//only accessible for logged in users
-    //     res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
-    // } else {
+    if (user === undefined) {				//only accessible for logged in users
+        res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
+    } else {
     	res.render('newpost');
-    // }
+    }
 })
 
-app.post('/newpost', (req, res) => {
-	db.sync({force: true})					//sync to database for input new row Post
-	.then(() => Post.create({
+app.post('/newpost', (req, res) => {				
+	Post.create({						//sync to database for input new row Post
 		title: req.body.title,
-		body: req.body.body
-	}))
+		body: req.body.body,
+		userId: req.session.user.id || 0 //if it does not exist it is a 0, which means something is wrong
+	})
 	.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	res.redirect('/myposts')
 });
@@ -203,8 +203,8 @@ app.get('/logout', (req, res) => {
 	});
 });
 
+/* --------------------------------------------------------------------------------------------- */
 
 const server = app.listen(3000, () => {
-
 	console.log("The server has started at port:" + server.address().port);
 });
