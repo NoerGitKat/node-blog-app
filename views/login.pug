@@ -8,7 +8,10 @@ html
 			a(href="/") Home
 			h1 Welcome to the login area! Very security.
 			p Fill in your username and password here:
-			form#loginForm(method="POST" action="/login")
-					input.userName(type="text" placeholder="Your Username" required)
-					input.userPassword(type="password" placeholder="Your Password" required)
-					input.loginButton(type="submit" value="Login!")
+			form(method="POST" action="/login")
+					input(type="text" placeholder="Your Username" required)
+					input(type="password" placeholder="Your Password" required)
+					input(type="submit" value="Login!")
+			div.footer
+				footer
+					h5 &copy; 2017 So Wow Inc. All Rights Reserved.

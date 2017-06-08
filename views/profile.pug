@@ -4,10 +4,12 @@ html
 		link(rel="stylesheet", href="../css/style.css")
 	body
 		div.container
-			h1 My amazing profile
+			h1 #{user}'s amazing profile
+			a#logout(href="/logout") Logout
 			a(href="/") Home
-			a(href="/posts") View my own cool posts
+			a(href="/myposts") View my own cool posts
 			a(href="/viewall") View everyone's posts, wow!
 			a(href="/newpost") Create a new post
-			h3 My latest groovy post...
-			//-  put in variable for latest post
+			div.footer
+				footer
+					h5 &copy; 2017 So Wow Inc. All Rights Reserved.

@@ -4,6 +4,10 @@ input {
 	padding: 5px;
 }
 
-p {
+.container > p {
 	margin: 10px;
+}
+
+a {
+	float: left;
 }

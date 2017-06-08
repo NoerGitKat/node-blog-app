@@ -6,21 +6,25 @@ html
 
 	body
 		div.container
-			a(href="/") Home
-			h1 Welcome to the register area! Much excited.
-			p Fill in the following form to register:
-			form#registerForm(method="POST" action="/register")
-				p Username:
-					input(type="text" name="username" placeholder="Your Username" minlength="3" required)
-				p First name:
-					input(type="text" name="firstname" placeholder="Your First Name" minlength="3" required)
-				p Last name:
-					input(type="text" name="lastname" placeholder="Your Last Name" minlength="3" required)
-				p Email:
-					input(type="email" name="email" placeholder="Your Email Address" required)
-				p Password:
-					input(type="password" name="password" placeholder="Your Password" required)
-				p Confirm Password:
-					input(type="password" name="password2" placeholder="Confirm Password" required)
-				p
-					input(type="submit" name="submit" value="Register!")
+			header
+				a(href="/") Home
+			main
+				h1 Welcome to the register area! Much excited.
+				p Fill in the following form to register:
+				form#registerForm(method="POST" action="/register")
+					p Username:
+						input(type="text" name="username" placeholder="Your Username" minlength="3" required)
+					p First name:
+						input(type="text" name="firstname" placeholder="Your First Name" minlength="3" required)
+					p Last name:
+						input(type="text" name="lastname" placeholder="Your Last Name" minlength="3" required)
+					p Email:
+						input(type="email" name="email" placeholder="Your Email Address" required)
+					p Password:
+						input(type="password" name="password" placeholder="Your Password" required)
+					p Confirm Password:
+						input(type="password" name="password2" placeholder="Confirm Password" required)
+					p
+						input(type="submit" name="submit" value="Register!")
+			footer
+				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

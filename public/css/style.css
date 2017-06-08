@@ -8,20 +8,15 @@ body {
 	color: #1d605b;
 }
 
-h1 {
-	margin: 0;
+main h1 {
+	margin-top: 20px;
+	margin-bottom: -5px;
+	display: block;
 }
 
 p {
 	margin: 10px;
 } 
-
-
-li {
-	list-style-type: none;
-	display: inline-block;
-	float: right;
-}
 
 a {
 	text-decoration: none;
@@ -29,6 +24,7 @@ a {
 	border-radius: 5px;
 	padding: 10px;
 	color: #1d605b;
+	float: left;
 }
 
 a:hover {
@@ -44,4 +40,19 @@ a:hover {
 	padding: 10px 20px 20px;
 	width: 50%;
 	margin: 150px auto 0;
+}
+
+#logout {
+	background-color: ##598c8c;
+}
+
+#logout:hover {
+	background-color: #4c7777;
+}
+
+footer {
+	border-top: 1px solid grey;
+	margin-top: 20px;
+	padding-top: 10px;
+	display: block;
 }

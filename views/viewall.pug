@@ -1,6 +1,6 @@
 html
 	head
-		title All my cool posts!
+		title View All Posts
 		link(rel="stylesheet", href="../css/style.css")
 		link(rel="stylesheet", href="../css/posts.css")
 	body
@@ -8,10 +8,10 @@ html
 			header
 				a#logout(href="/logout") Logout
 				a(href="/") Home
+				a(href="/myposts") My posts
 				a(href="/newpost") Create new posts
 			main
-				h1 Look at these pretty posts!
-				p They're all mine, mwuahaha
+				h1 Look at these here beautiful posts!
 				div.postcontainer
 					each post in posts
 						p.title #{post.title}

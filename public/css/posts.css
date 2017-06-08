@@ -1,0 +1,21 @@
+.postcontainer {
+	border: 1px solid grey;
+	display: inline-block;
+}
+
+.postcontainer .title {
+	border-bottom: 1px solid grey;
+	margin-top: 0;
+	padding: 5px;
+}
+
+h1 {
+	display: block;
+	margin: 0 auto 10px;
+}
+
+#form .title, .body {
+	font-family: Helvetica;
+	font-size: 14px;
+	width: 400px;
+}
