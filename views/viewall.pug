@@ -8,13 +8,15 @@ html
 			header
 				a#logout(href="/logout") Logout
 				a(href="/") Home
-				a(href="/myposts") My posts
-				a(href="/newpost") Create new posts
+				a(href="/profile") My Profile
+				a(href="/myposts") My Posts
+				a(href="/newpost") Create New Posts
 			main
 				h1 Look at these here beautiful posts!
 				div.postcontainer
 					each post in posts
-						p.title #{post.title}
+						each user in users
+						p.title #{user.userId} wrote: #{post.title}
 						p.body #{post.body}
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

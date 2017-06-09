@@ -2,16 +2,16 @@ html
 	head
 		title Log in here!
 		link(rel="stylesheet", href="../css/style.css")
-		link(rel="stylesheet", href="../css/form.css")
 	body
 		div.container
-			a(href="/") Home
-			h1 Welcome to the login area! Very security.
-			p Fill in your username and password here:
-			form(method="POST" action="/login")
-					input(type="text" name="username" placeholder="Your Username" required)
-					input(type="password" name="password" placeholder="Your Password" required)
-					input(type="submit" value="Login!")
-			div.footer
-				footer
-					h5 &copy; 2017 So Wow Inc. All Rights Reserved.
+			header
+				a(href="/") Home
+			main
+				h1 Welcome to the login area! Very security.
+				p Fill in your username and password here:
+				form(method="POST" action="/login")
+						input(type="text" name="username" placeholder="Your Username" required)
+						input(type="password" name="password" placeholder="Your Password" required)
+						input(type="submit" value="Login!")
+			footer
+				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

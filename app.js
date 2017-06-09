@@ -174,7 +174,8 @@ app.get('/myposts', (req, res) => {
 			}
 		})
 		.then((posts) => {
-			res.render('myposts', { 
+			res.render('myposts', {
+				user: user.username, 
 				posts: posts
 			})
 		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
@@ -208,12 +209,16 @@ app.get('/viewall', (req, res) => {
 	if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
     } else {
-		Post.findAll()
-		.then((posts) => {
-			res.render('viewall', {
-				posts: posts
-			});
-		})
+    	User.findAll()
+    	.then((users) => {
+    		Post.findAll()
+			.then((posts) => {
+				res.render('viewall', {
+					users: users,
+					posts: posts
+				});
+			})
+    	})
 		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	}
 });

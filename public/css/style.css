@@ -8,6 +8,11 @@ body {
 	color: #1d605b;
 }
 
+img {
+	width: 400px;
+	height: 200px;
+}
+
 main h1 {
 	margin-top: 20px;
 	margin-bottom: -5px;
@@ -54,4 +59,12 @@ footer {
 	margin-top: 20px;
 	padding-top: 10px;
 	display: block;
+}
+
+main input {
+	padding: 5px;
+}
+
+main .registerbutton {
+	padding: 10px;
 }

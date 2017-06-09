@@ -3,21 +3,25 @@ html
 		title Post new message
 		link(rel="stylesheet", href="../css/style.css")
 		link(rel="stylesheet", href="../css/posts.css")
-		link(rel="stylesheet" href="../css/form.css")
 	body
 		div.container
 			header
-				a(href="/logout") Logout
+				a#logout(href="/logout") Logout
 				a(href="/") Home
-				a(href="/viewall") View all posts
-				a(href="/myposts") View my posts
+				a(href="/profile") My Profile
+				a(href="/viewall") View All Posts
+				a(href="/myposts") View My Posts
 			main
 				h1 Very posts, much cool
-				p Create a new post:
+				br
+				h3 Create a new post:
+				br
 				form#form(method="POST" action="/newpost")
 					input.title(type="text" name="title" placeholder="My nice title..." maxlength="30" required)
 					br
-					textarea.body(type="text" name="body" placeholder="My nice message..." maxlength="80" required)
-					input(type="submit" name="submit" value="Post!")
+					textarea.body(type="text" name="body" placeholder="My nice message..." maxlength="200" required)
+					br
+					br
+					input.postbutton(type="submit" name="submit" value="Post!")
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

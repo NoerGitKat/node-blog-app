@@ -4,12 +4,15 @@ html
 		link(rel="stylesheet", href="../css/style.css")
 	body
 		div.container
-			h1 #{user.username}'s amazing profile
-			a#logout(href="/logout") Logout
-			a(href="/") Home
-			a(href="/myposts") View my own cool posts
-			a(href="/viewall") View everyone's posts, wow!
-			a(href="/newpost") Create a new post
-			div.footer
-				footer
-					h5 &copy; 2017 So Wow Inc. All Rights Reserved.
+			header
+				a#logout(href="/logout") Logout
+				a(href="/") Home
+				a(href="/viewall") View All Posts
+				a(href="/myposts") View My Posts
+				a(href="/newpost") Create A New Post
+			main
+				h1 #{user.username}'s amazing profile
+				br
+				img(src="../gifs/dogerocket.gif" alt="To The Moon!!!")
+			footer
+				h5 &copy; 2017 So Wow Inc. All Rights Reserved.
