@@ -1,3 +1,6 @@
+/* --------------------------------------------------------------------------------------------- */
+										  /*SETTINGS*/
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -25,6 +28,7 @@ app.use(session({
 }));
 
 /* --------------------------------------------------------------------------------------------- */
+										  /*MODELS*/
 
 //Creating models for user + posts + comments
 var User = db.define('user', {
@@ -66,6 +70,7 @@ var Comment = db.define('comment', {
 });
 
 /* --------------------------------------------------------------------------------------------- */
+										/*RELATIONSHIPS*/
 
 //Establishing relationships between models
 User.hasMany(Post);
@@ -76,17 +81,25 @@ Comment.belongsTo(User);
 Comment.belongsTo(Post);
 
 /* --------------------------------------------------------------------------------------------- */
+										  /*ROUTES*/
 
-//Routes
+//Homepage
 app.get('/', (req, res) => {
-	res.render('index');			//homepage
+	var user = req.session.user; 
+	if (user == undefined) {
+		res.render('index');
+		return
+	} else {
+		res.render('index2');
+	}
 });
 
+//Register page
 app.get('/register', (req, res) => {
-	res.render('register');			//register page
+	res.render('register');			
 });
 
-app.post('/register', (req, res) => {						//sync to database for input new row
+app.post('/register', (req, res) => {						//Register user info in table User
 	User.create({
 		username: req.body.username,
 		firstname: req.body.firstname,
@@ -95,26 +108,29 @@ app.post('/register', (req, res) => {						//sync to database for input new row
 		password: req.body.password
 	})
 	.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
-
 	res.redirect('/login');
 });
 
+//Login page
 app.get('/login', (req, res) => {
-	res.render('login');		//login page
+	res.render('login');		
 });
 
 app.post('/login', (req, res) => {
+	console.log(req.body.username);
 	if (req.body.username == undefined) {
 		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
+		return
 	} 
 	if (req.body.password == undefined) {
 		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
+		return
 	} 
 	else {
 	// find matching data between input and users in db
 		User.findOne({
 			where: {
-				username: user.username
+				username: req.body.username
 			}
 		})
 		.then((user) => {
@@ -123,15 +139,17 @@ app.post('/login', (req, res) => {
 				res.redirect('/profile');
 			} else {
 				res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
+				return
 			}
 		})
 		.catch( (error) => {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
+			return
 		});
 	}
 });
 	
-
+//Profile page
 app.get('/profile', (req, res) => {
 	var user = req.session.user;
     if (user === undefined) {				//only accessible for logged in users
@@ -143,28 +161,32 @@ app.get('/profile', (req, res) => {
     }
 });
 
+//User's posts page
 app.get('/myposts', (req, res) => {
 	var user = req.session.user;
     if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
+        return;
     } else {
 		Post.findAll({
 			where: {
-				user: user.username
+				userId: user.id
 			}
 		})
 		.then((posts) => {
 			res.render('myposts', { 
 				posts: posts
-			});
+			})
+		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 		})
 	}
 });
 
+//Create a new post page
 app.get('/newpost', (req,res) => {
 	var user = req.session.user;
     if (user === undefined) {				//only accessible for logged in users
-        res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
+        res.redirect('/login?message=' + encodeURIComponent("Please log in to create a new post."));
     } else {
     	res.render('newpost');
     }
@@ -180,20 +202,23 @@ app.post('/newpost', (req, res) => {
 	res.redirect('/myposts')
 });
 
+//View everybody's posts page
 app.get('/viewall', (req, res) => {
-	//query database for all posts, no filter
-	//render view w/ all posts
-	db.sync()
-	.then(() => {
+	var user = req.session.user;
+	if (user === undefined) {				//only accessible for logged in users
+        res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
+    } else {
 		Post.findAll()
 		.then((posts) => {
 			res.render('viewall', {
 				posts: posts
-			})
+			});
 		})
-	})
-})
+		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+	}
+});
 
+//Log out route that redirects to home
 app.get('/logout', (req, res) => {
 	req.session.destroy(function(error) {			//destroy session after logout
 		if(error) {

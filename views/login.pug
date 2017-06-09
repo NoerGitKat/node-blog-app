@@ -9,8 +9,8 @@ html
 			h1 Welcome to the login area! Very security.
 			p Fill in your username and password here:
 			form(method="POST" action="/login")
-					input(type="text" placeholder="Your Username" required)
-					input(type="password" placeholder="Your Password" required)
+					input(type="text" name="username" placeholder="Your Username" required)
+					input(type="password" name="password" placeholder="Your Password" required)
 					input(type="submit" value="Login!")
 			div.footer
 				footer
