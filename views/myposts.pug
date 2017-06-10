@@ -17,7 +17,7 @@ html
 				div.postcontainer
 					each post in posts
 						div.onepost
-							p.title #{user} wrote: "#{post.title}"
+							p.title #{user.username} wrote: "#{post.title}"
 							p.body #{post.body}
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

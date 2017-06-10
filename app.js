@@ -177,10 +177,10 @@ app.get('/myposts', (req, res) => {
 		})
 		.then((posts) => {
 			res.render('myposts', {
-				user: user.username, 
+				user: user, 
 				posts: posts
 			})
-		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+		.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 		})
 	}
 });
@@ -211,21 +211,27 @@ app.get('/viewall', (req, res) => {
 	if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
     } else {
-    	Post.findAll()					//store users data and posts data for use in viewall
-		.then((posts) => {
-			res.render('viewall', {
-			posts: posts
+    	User.findAll()
+    	.then((users) => {
+    		Post.findAll()					//store users data and posts data for use in viewall
+			.then((posts) => {
+				res.render('viewall', {
+				posts: posts,
+				users: users
+				})
 			})
-		})
+    	})
 		.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	}
 });
 
 //Comment route
 app.post('/comment', (req, res) => {
-	var user = request.session.user;
+	var user = req.session.user;
 	Comment.create({
-		body: req.body.comment
+		body: req.body.comment,
+		postId: req.body.postId,
+		userId: user.id
 	})
 	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	res.redirect('/viewall');

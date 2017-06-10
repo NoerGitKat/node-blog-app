@@ -15,13 +15,16 @@ html
 				h1 Look at these here beautiful posts!
 				div.postcontainer
 					each post in posts
-						p.title Someone wrote "#{post.title}"
-						p.body #{post.body}
-								//- p.comment #{user.userId} commented: #{comment.body}
-								//- form#commentform(method="POST" action="/comment")
-								//- 	textarea.comment(type="text" name="comment" placeholder="My nice comment...")
-								//- 	input.commentbutton(type="submit" name="submit" value="Comment!")
-								//- br
-
+						each user in users
+							if post.userId === user.id
+								p.title #{user.username} wrote "#{post.title}"
+								p.body #{post.body}
+								br
+								//- p.comment #{user.username} commented: #{comment.body}
+								form#commentform(method="POST" action="/comment")
+									textarea.comment(type="text" name="comment" placeholder="My nice comment...")
+									input(type='hidden' name='postId' value='post.id')
+									input.commentbutton(type="submit" name="submit" value="Comment!")
+								br
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.
