@@ -9,14 +9,19 @@ html
 				a#logout(href="/logout") Logout
 				a(href="/") Home
 				a(href="/profile") My Profile
-				a(href="/myposts") My Posts
+				a(href="/myposts") View My Posts
 				a(href="/newpost") Create New Posts
 			main
 				h1 Look at these here beautiful posts!
 				div.postcontainer
 					each post in posts
-						each user in users
-						p.title #{user.userId} wrote: #{post.title}
+						p.title Someone wrote "#{post.title}"
 						p.body #{post.body}
+								//- p.comment #{user.userId} commented: #{comment.body}
+								//- form#commentform(method="POST" action="/comment")
+								//- 	textarea.comment(type="text" name="comment" placeholder="My nice comment...")
+								//- 	input.commentbutton(type="submit" name="submit" value="Comment!")
+								//- br
+
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

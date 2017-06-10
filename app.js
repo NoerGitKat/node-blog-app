@@ -80,6 +80,8 @@ Post.hasMany(Comment);
 Comment.belongsTo(User);
 Comment.belongsTo(Post);
 
+db.sync();
+
 /* --------------------------------------------------------------------------------------------- */
 										  /*ROUTES*/
 
@@ -106,8 +108,8 @@ app.post('/register', (req, res) => {						//Register user info in table User
 		lastname: req.body.lastname,
 		email: req.body.email,
 		password: req.body.password
-	})
-	.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+		})
+	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	res.redirect('/login');
 });
 
@@ -142,7 +144,7 @@ app.post('/login', (req, res) => {
 				return
 			}
 		})
-		.catch( (error) => {
+		.catch((error) => {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
 			return
 		});
@@ -198,8 +200,8 @@ app.post('/newpost', (req, res) => {
 		title: req.body.title,
 		body: req.body.body,
 		userId: req.session.user.id || 0 //if it does not exist it is a 0, which means something is wrong
-	})
-	.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+		})
+	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	res.redirect('/myposts')
 });
 
@@ -209,18 +211,24 @@ app.get('/viewall', (req, res) => {
 	if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
     } else {
-    	User.findAll()
-    	.then((users) => {
-    		Post.findAll()
-			.then((posts) => {
-				res.render('viewall', {
-					users: users,
-					posts: posts
-				});
+    	Post.findAll()					//store users data and posts data for use in viewall
+		.then((posts) => {
+			res.render('viewall', {
+			posts: posts
 			})
-    	})
-		.catch(error => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+		})
+		.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 	}
+});
+
+//Comment route
+app.post('/comment', (req, res) => {
+	var user = request.session.user;
+	Comment.create({
+		body: req.body.comment
+	})
+	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+	res.redirect('/viewall');
 });
 
 //Log out route that redirects to home
@@ -234,6 +242,7 @@ app.get('/logout', (req, res) => {
 });
 
 /* --------------------------------------------------------------------------------------------- */
+											/*SERVER*/
 
 const server = app.listen(3000, () => {
 	console.log("The server has started at port:" + server.address().port);

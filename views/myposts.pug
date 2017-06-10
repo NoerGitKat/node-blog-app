@@ -16,8 +16,8 @@ html
 				p They're all mine, mwuahaha
 				div.postcontainer
 					each post in posts
-						p.title #{user} wrote: #{post.title}
-						p.body #{post.body}
-						br
+						div.onepost
+							p.title #{user} wrote: "#{post.title}"
+							p.body #{post.body}
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.
