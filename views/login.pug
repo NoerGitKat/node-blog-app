@@ -2,6 +2,7 @@ html
 	head
 		title Log in here!
 		link(rel="stylesheet", href="../css/style.css")
+		link(rel="stylesheet", href="../css/posts.css")
 	body
 		div.container
 			header
@@ -11,8 +12,8 @@ html
 				h1 Welcome to the login area! Very security.
 				p Fill in your username and password here:
 				form(method="POST" action="/login")
-						input(type="text" name="username" placeholder="Your Username" required)
-						input(type="password" name="password" placeholder="Your Password" required)
-						input(type="submit" value="Login!")
+						input.username(type="text" name="username" placeholder="Your Username" required)
+						input.username(type="password" name="password" placeholder="Your Password" required)
+						input.loginbutton(type="submit" value="Login!")
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

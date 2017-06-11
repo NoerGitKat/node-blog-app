@@ -33,6 +33,7 @@ a {
 
 a:hover {
 	color: darkgrey;
+	cursor: pointer;
 }
 
 .container {
@@ -43,7 +44,7 @@ a:hover {
 	text-align: center;
 	padding: 10px 20px 20px;
 	width: 50%;
-	margin: 150px auto 0;
+	margin: 100px auto;
 }
 
 #logout {
@@ -59,12 +60,4 @@ footer {
 	margin-top: 20px;
 	padding-top: 10px;
 	display: block;
-}
-
-main input {
-	padding: 5px;
-}
-
-main .registerbutton {
-	padding: 10px;
 }

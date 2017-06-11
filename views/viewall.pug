@@ -10,20 +10,27 @@ html
 				a(href="/") Home
 				a(href="/profile") My Profile
 				a(href="/myposts") View My Posts
-				a(href="/newpost") Create New Posts
+				a(href="/newpost") Create A New Post
 			main
 				h1 Look at these here beautiful posts!
 				div.postcontainer
 					each post in posts
 						each user in users
 							if post.userId == user.id
-								p.title #{user.username} wrote "#{post.title}"
-								p.body #{post.body}
-								br
-								//- p.comment #{user.username} commented: #{comment.body}
+								p.postTitle 
+									strong #{user.username} wrote "#{post.title}"
+								p.postBody #{post.body}
+								div.commentBox
+								each comment in post.comments
+									each user in users
+										if comment.userId == user.id
+											p.comment 
+												strong 
+													i  #{user.username} commented: 
+												|	#{comment.body}
 								form#commentform(method="POST" action="/comment")
-									textarea.comment(type="text" name="comment" placeholder="My nice comment...")
-									input(type='hidden' name='postId' value='post.id')
+									textarea.commentArea(type="text" name="comment" placeholder="My nice comment..." maxlength="30" required)
+									input(type='hidden' name='postId' value=post.id)
 									input.commentbutton(type="submit" name="submit" value="Comment!")
 								br
 			footer

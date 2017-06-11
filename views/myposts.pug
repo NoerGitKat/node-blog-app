@@ -14,10 +14,18 @@ html
 			main
 				h1 Look at these pretty posts!
 				p They're all mine, mwuahaha
-				div.postcontainer
-					each post in posts
-						div.onepost
-							p.title #{user.username} wrote: "#{post.title}"
-							p.body #{post.body}
+				if posts == 0
+					br
+					a(href="/newpost") Let's make a first post!
+					br
+					br
+				else
+					div.postcontainer
+						each post in posts
+							div.onepost
+								p.postTitle
+									strong 
+										| #{user.username} wrote: "#{post.title}"
+								p.postBody #{post.body}
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.

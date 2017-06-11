@@ -2,6 +2,7 @@
 	border: 1px solid grey;
 	display: inline-block;
 	margin: 10px 0 0;
+	width: 60%;
 }
 
 .postcontainer .title {
@@ -10,12 +11,25 @@
 	padding: 5px;
 }
 
-/*.onepost {
-	display: block;
-	height: 50px;
-	width: 100px;
+.postcontainer .body {
+	padding-bottom: 20px;
+	margin-bottom: 0;
+}
+
+.title:focus, .body:focus, .commentArea:focus, .username:focus, .password:focus {
+	background-color: #ddd9d9;
+}
+
+.username, .password {
+	padding: 5px;
 	border: 1px solid grey;
-}*/
+	border-radius: 5px;
+}
+
+.loginbutton {
+	margin-left: 10px;
+	padding: 4px;
+}
 
 h1 {
 	display: block;
@@ -27,26 +41,84 @@ h1 {
 	scroll-behavior: scroll;
 }
 
-#form .title, .body {
+#newPostForm .title, .body {
 	font-family: Helvetica;
 	font-size: 14px;
 	padding: 10px;
 	width: 400px;
+	border: 1px solid grey;
+	border-radius: 5px;
+	opacity: 0.8;
 }
 
-#form .postbutton {
+.postTitle {
+	border-bottom: 1px solid grey;
+	padding: 10px;
+	margin-top: 0;
+}
+
+/*.postTitle, .postBody {
+	font-family: Helvetica;
+	border-bottom: 1px solid grey;
+	margin-top: 0;
+	padding: 5px;
+	opacity: 0.8;
+}*/
+
+#newPostForm .title:focus, .body:focus {
+	background-color: #ddd9d9;
+}
+
+
+
+#newPostForm .postbutton {
 	padding: 10px;
 }
 
-#commentform .comment {
-	margin: 0 auto;
+#commentForm textarea {
+	border: 1px solid grey;
+	padding: 5px;
+	opacity: 0.7;
+}
+
+#commentform .commentArea {
+	margin: 10px auto;
 	display: block;
 	resize: none;
+	border-radius: 5px;
 	scroll-behavior: scroll;
 	width: 300px;
 	height: 50px;
 }
 
 #commentform .commentbutton {
-	margin-top: 10px;
+	padding: 5px;
+}
+
+.postcontainer .comment {
+	margin: 0;
+	padding: 0;
+}
+
+.commentBox {
+	border-top: 1px solid grey;
+	width: 95%;
+	margin: 0 auto 5px;
+}
+
+#registerForm input {
+	border: 1px solid grey;
+	border-radius: 5px;
+	padding: 5px;
+	margin-left: 5px;
+}
+
+#registerForm input:focus {
+	background-color: #ddd9d9;
+	opacity: 0.7;
+}
+
+.registerbutton {
+	margin-top: 20px;
+	padding: 10px;
 }

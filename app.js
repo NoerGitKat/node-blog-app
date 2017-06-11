@@ -6,7 +6,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const db = new Sequelize('nodeblog', 'postgres' /*process.env.POSTGRES_USER*/, 'Blabla_55' /*process.env.POSTGRES_PASSWORD*/, {
+const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
@@ -22,7 +22,7 @@ app.set('view engine', 'pug');
 
 //Create a session
 app.use(session({
-	secret: 'omg this is too secret to talk about' /*process.env.SECRET_SESSION*/,
+	secret: process.env.SECRET_SESSION,
 	resave: false,
 	saveUninitialized: true
 }));
@@ -119,16 +119,6 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-	console.log(req.body.username);
-	if (req.body.username == undefined) {
-		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
-		return
-	} 
-	if (req.body.password == undefined) {
-		res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
-		return
-	} 
-	else {
 	// find matching data between input and users in db
 		User.findOne({
 			where: {
@@ -140,15 +130,12 @@ app.post('/login', (req, res) => {
 				req.session.user = user;				//this starts session for user
 				res.redirect('/profile');
 			} else {
-				res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
-				return
+				res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
 			}
 		})
 		.catch((error) => {
-			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
-			return
+			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
 		});
-	}
 });
 	
 //Profile page
@@ -173,15 +160,22 @@ app.get('/myposts', (req, res) => {
 		Post.findAll({
 			where: {
 				userId: user.id
-			}
+			},
+			include: [{
+				model: Comment,
+				as: 'comments'
+			}]
 		})
 		.then((posts) => {
 			res.render('myposts', {
 				user: user, 
 				posts: posts
 			})
-		.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 		})
+		.catch((error) => {
+			console.log('Oh noes! An error has occurred! Kill it with fire!', error);
+			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
+		});
 	}
 });
 
@@ -196,13 +190,19 @@ app.get('/newpost', (req,res) => {
 })
 
 app.post('/newpost', (req, res) => {				
+	var user = req.session.user;
 	Post.create({						//sync to database for input new row Post
 		title: req.body.title,
 		body: req.body.body,
-		userId: req.session.user.id || 0 //if it does not exist it is a 0, which means something is wrong
+		userId: user.id || 0 //if it does not exist it is a 0, which means something is wrong
 		})
-	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
-	res.redirect('/myposts')
+	.then(() => {
+			res.redirect('/myposts');
+	})
+	.catch((error) => {
+			console.log('Oh noes! An error has occurred! Kill it with fire!', error);
+			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
+	});
 });
 
 //View everybody's posts page
@@ -211,37 +211,50 @@ app.get('/viewall', (req, res) => {
 	if (user === undefined) {				//only accessible for logged in users
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
     } else {
-    	User.findAll()
+    	User.findAll()			//find User and Post data for use in /viewall
     	.then((users) => {
-    		Post.findAll()					//store users data and posts data for use in viewall
+    		Post.findAll({
+    			include: [{				//show posts including comments
+    				model: Comment,
+    				as: 'comments'
+    			}]
+    		})
 			.then((posts) => {
-				res.render('viewall', {
-					posts: posts,
-					users: users
-				})
+					res.render('viewall', {
+						posts: posts,
+						users: users,
+					})
 			})
     	})
-		.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+		.catch((error) => {
+			console.log('Oh noes! An error has occurred! Kill it with fire!', error);
+			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
+		});
 	}
 });
 
 //Comment route
 app.post('/comment', (req, res) => {
 	var user = req.session.user;
-	Comment.create({
-		body: req.body.comment,
-		postId: req.body.postId,
-		userId: user.id
+	User.findOne({
+		where: {
+			username: user.username
+		}
 	})
-	.then(() => {
-		Comment.findAll()
-		.then((comments) => {
-			res.render('/viewall', {
-				comments: comments
-			});
+	.then((user) => {
+		return Comment.create({
+				body: req.body.comment,
+				postId: req.body.postId,
+				userId: user.id
+			})
+		.then(() => {
+				res.redirect('/viewall');
+			})
 		})
+	.catch((error) => {
+			console.log('Oh noes! An error has occurred! Kill it with fire!', error);
+			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
 	})
-	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
 });
 
 //Log out route that redirects to home
@@ -255,7 +268,7 @@ app.get('/logout', (req, res) => {
 });
 
 /* --------------------------------------------------------------------------------------------- */
-											/*SERVER*/
+											/*SERVER PORT*/
 
 const server = app.listen(3000, () => {
 	console.log("The server has started at port:" + server.address().port);
