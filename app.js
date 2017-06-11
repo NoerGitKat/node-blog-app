@@ -216,8 +216,8 @@ app.get('/viewall', (req, res) => {
     		Post.findAll()					//store users data and posts data for use in viewall
 			.then((posts) => {
 				res.render('viewall', {
-				posts: posts,
-				users: users
+					posts: posts,
+					users: users
 				})
 			})
     	})
@@ -233,8 +233,15 @@ app.post('/comment', (req, res) => {
 		postId: req.body.postId,
 		userId: user.id
 	})
+	.then(() => {
+		Comment.findAll()
+		.then((comments) => {
+			res.render('/viewall', {
+				comments: comments
+			});
+		})
+	})
 	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
-	res.redirect('/viewall');
 });
 
 //Log out route that redirects to home

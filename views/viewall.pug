@@ -16,7 +16,7 @@ html
 				div.postcontainer
 					each post in posts
 						each user in users
-							if post.userId === user.id
+							if post.userId == user.id
 								p.title #{user.username} wrote "#{post.title}"
 								p.body #{post.body}
 								br
