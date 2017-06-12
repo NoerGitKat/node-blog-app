@@ -157,21 +157,24 @@ app.get('/myposts', (req, res) => {
         res.redirect('/login?message=' + encodeURIComponent("Please log in to view your posts."));
         return;
     } else {
-		Post.findAll({
-			where: {
-				userId: user.id
-			},
-			include: [{
-				model: Comment,
-				as: 'comments'
-			}]
-		})
-		.then((posts) => {
-			res.render('myposts', {
-				user: user, 
-				posts: posts
+    	User.findAll()
+    	.then((users) => {
+    		Post.findAll({
+				where: {
+					userId: user.id
+				},
+				include: [{
+					model: Comment,
+					as: 'comments'
+					}]
 			})
-		})
+			.then((posts) => {
+				res.render('myposts', {
+					users: users, 
+					posts: posts
+				})
+			})
+    	})
 		.catch((error) => {
 			console.log('Oh noes! An error has occurred! Kill it with fire!', error);
 			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));

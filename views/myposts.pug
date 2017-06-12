@@ -22,10 +22,19 @@ html
 				else
 					div.postcontainer
 						each post in posts
-							div.onepost
-								p.postTitle
-									strong 
-										| #{user.username} wrote: "#{post.title}"
-								p.postBody #{post.body}
+							each user in users
+								if post.userId == user.id
+									div.onepost
+										p.postTitle
+											strong 
+												| #{user.username} wrote: "#{post.title}"
+										p.postBody #{post.body}
+										each comment in post.comments
+											each user in users
+												if comment.userId == user.id
+													p.comment 
+														strong 
+															i  #{user.username} commented: 
+														|	#{comment.body}
 			footer
 				h5 &copy; 2017 So Wow Inc. All Rights Reserved.
