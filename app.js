@@ -3,10 +3,11 @@
 
 const express = require('express');
 const app = express();
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+const db = new Sequelize('nodeblog', 'postgres'/*process.env.POSTGRES_USER*/, 'Blabla_55' /*process.env.POSTGRES_PASSWORD*/, {
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
@@ -22,7 +23,7 @@ app.set('view engine', 'pug');
 
 //Create a session
 app.use(session({
-	secret: process.env.SECRET_SESSION,
+	secret: 'omg this is too secret to talk about'/*process.env.SECRET_SESSION*/,
 	resave: false,
 	saveUninitialized: true
 }));
@@ -101,15 +102,18 @@ app.get('/register', (req, res) => {
 	res.render('register');			
 });
 
-app.post('/register', (req, res) => {						//Register user info in table User
-	User.create({
-		username: req.body.username,
-		firstname: req.body.firstname,
-		lastname: req.body.lastname,
-		email: req.body.email,
-		password: req.body.password
-		})
-	.catch((error) => console.log('Oh noes! An error has occurred! Kill it with fire!', error));
+app.post('/register', (req, res) => {
+	var password = req.body.password
+	bcrypt.hash(password, 10, (err, hash) => {		//create hash for password security
+		if (err) throw err;						
+		User.create({						//Register user info in table User
+			username: req.body.username,
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			email: req.body.email,
+			password: hash
+			})
+	})
 	res.redirect('/login');
 });
 
@@ -126,12 +130,18 @@ app.post('/login', (req, res) => {
 			}
 		})
 		.then((user) => {
-			if (user !== null && req.body.password === user.password) {
-				req.session.user = user;				//this starts session for user
-				res.redirect('/profile');
-			} else {
-				res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
-			}
+			var password = req.body.password
+			bcrypt.compare(password, user.password, (err, data) => {	//validate password
+				if (err) throw err;
+				if (user !== null && data == true) 
+				{
+					req.session.user = user;				//this starts session for user
+					res.redirect('/profile');
+				} 
+				else {
+					res.redirect('/login?message=' + encodeURIComponent("Invalid username or password."));
+				}
+			});
 		})
 		.catch((error) => {
 			res.redirect('/?message=' + encodeURIComponent('Error has occurred. Please check the server.'));
