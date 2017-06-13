@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const db = new Sequelize('nodeblog', 'postgres'/*process.env.POSTGRES_USER*/, 'Blabla_55' /*process.env.POSTGRES_PASSWORD*/, {
+const db = new Sequelize('nodeblog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	host: 'localhost',
 	dialect: 'postgres',
 	define: {
@@ -23,7 +23,7 @@ app.set('view engine', 'pug');
 
 //Create a session
 app.use(session({
-	secret: 'omg this is too secret to talk about'/*process.env.SECRET_SESSION*/,
+	secret: process.env.SECRET_SESSION,
 	resave: false,
 	saveUninitialized: true
 }));
